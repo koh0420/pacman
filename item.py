@@ -13,14 +13,14 @@ class Item:
         """
         Itemクラスのコンストラクタ
         引数にx座標とy座標を受け取り、それぞれの座標を初期化する
-        
+
         Args:
             x(int): x座標
             y(int): y座標
 
         Returns:
             None
-        
+
         Examples:
             item = Item(4, 5)
             item.now_x -> 4
@@ -31,6 +31,41 @@ class Item:
             item.status -> True
         """
         pass
-        
 
-    
+    def get_now_position(self) -> tuple[int, int]:
+        """
+        現在の座標を返す.
+
+        Returns:
+            tuple[int,int]:現在の座標
+
+        Example
+            >>> item = Item(1,2)
+            >>> item.get_now_position()
+            (1,2)
+        """
+        pass
+
+    def move(self, move_to: tuple[int, int]) -> None:
+        """
+        受け取った移動先の座標に今の座標を変換して移動する
+        Args:
+            move_to(tuple[int,int]):移動先の座標
+
+        Returns:
+            None
+
+        Example
+            >>> item = Item(1,2)
+            >>> item.get_now_position()
+            (1,2)
+            >>> item.move(3,2)
+            >>> item.get_now_position()
+            (3,2)
+        """
+        pass
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

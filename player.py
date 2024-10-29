@@ -19,9 +19,10 @@ class Player(Item):
     """
     def __init__(self, x, y) -> None:
         """x,yを初期化し、プレイヤー(パックマン)の見た目を設定"""
-        pass
+        super().__init__(x, y)
+        self.icon = "👽"
 
-    def get_next_position(self, direction) -> tuple[int, int]:
+    def get_next_position(self, direction: int) -> tuple[int, int]:
         """移動後の座標を返す
         Args:
             direction(int):行きたい方向
@@ -30,20 +31,29 @@ class Player(Item):
             tuple[int, int]:移動先の座標([x座標,y座標])
 
         Example:
-            >>> player = player(1,2)
+            >>> player = Player(1,2)
             >>> player.get_next_position(0)
-            (2,2)
-            >>> player = player(1,2)
+            (2, 2)
+            >>> player = Player(1,2)
             >>> player.get_next_position(1)
-            (1,3)
-            >>> player = player(1,2)
+            (1, 3)
+            >>> player = Player(1,2)
             >>> player.get_next_position(2)
-            (0,2)
-            >>> player = player(1,2)
+            (0, 2)
+            >>> player = Player(1,2)
             >>> player.get_next_position(3)
-            (1,1)
+            (1, 1)
         """
-        pass
+        if (direction == 0):
+            self.next_x = self.now_x + 1
+        elif (direction == 1):
+            self.next_y = self.now_y + 1
+        elif (direction == 2):
+            self.next_x = self.now_x - 1
+        elif (direction == 3):
+            self.next_y = self.now_y - 1
+
+        return (self.next_x, self.next_y)
 
 
 if __name__ == "__main__":

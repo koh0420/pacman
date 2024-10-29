@@ -9,7 +9,7 @@ class Item:
        status(bool) : アイテムの状態（Trueなら存在する、Falseなら存在しない消滅した）
        icon(str) : 表示されるアイテムのアイコン
     """
-    def __init__(self, x, y) -> None:
+    def __init__(self, x: int, y: int) -> None:
         """
         Itemクラスのコンストラクタ
         引数にx座標とy座標を受け取り、それぞれの座標を初期化する
@@ -30,7 +30,11 @@ class Item:
             item.icon -> ''
             item.status -> True
         """
-        pass
+        self.now_x = x
+        self.now_y = y
+        self.next_x = x
+        self.next_y = y
+        self.icon = ""
 
     def get_now_position(self) -> tuple[int, int]:
         """
@@ -42,9 +46,9 @@ class Item:
         Example
             >>> item = Item(1,2)
             >>> item.get_now_position()
-            (1,2)
+            (1, 2)
         """
-        pass
+        return (self.now_x, self.now_y)
 
     def move(self, move_to: tuple[int, int]) -> None:
         """
@@ -58,12 +62,13 @@ class Item:
         Example
             >>> item = Item(1,2)
             >>> item.get_now_position()
-            (1,2)
-            >>> item.move(3,2)
+            (1, 2)
+            >>> item.move((3,2))
             >>> item.get_now_position()
-            (3,2)
+            (3, 2)
         """
-        pass
+        self.now_x = move_to[0]
+        self.now_y = move_to[1]
 
 
 if __name__ == "__main__":

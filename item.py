@@ -52,7 +52,7 @@ class Item:
 
     def move(self, move_to: tuple[int, int]) -> None:
         """
-        受け取った移動先の座標に今の座標を変換して移動する
+        受け取った移動先の座標に今の座標を変換して移動する.
         Args:
             move_to(tuple[int,int]):移動先の座標
 

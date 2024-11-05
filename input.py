@@ -14,12 +14,12 @@ class UserInput:
         key = InputWithoutEnter.input_without_enter()
         # 入力されたキーに対応する方向を返す
         if key == "w":
-            return 1
-        elif key == "a":
-            return 4
-        elif key == "s":
-            return 3
-        elif key == "d":
-            return 2
-        else:
             return 0
+        elif key == "a":
+            return 3
+        elif key == "s":
+            return 2
+        elif key == "d":
+            return 1
+        else:
+            return 4

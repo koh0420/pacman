@@ -1,3 +1,4 @@
+from game import Game
 import os
 import argparse
 from config import common_args, Parameters
@@ -25,15 +26,11 @@ def main() -> None:
     # ログ設定
     logger = logging.getLogger(__name__)
     set_logging(result_dir)  # ログを標準出力とファイルに出力するよう設定
-
-    # 使用例
     logger.info('parameters: ')
     logger.info(params)
-    logger.info(params.param1)  # params変数は各パラメータにドットアクセスが可能．
-    logger.info(params.args['arg1'])  # コマンドライン引数はargs['']でアクセス．
 
-    # do something...
-    logger.info('Process terminated successfully. ')
+    # ゲームの実行
+    Game(params)
 
 
 if __name__ == "__main__":

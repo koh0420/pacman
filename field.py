@@ -1,5 +1,8 @@
-"""
 from player import Player
+from enemy import Enemy
+from wall import Wall
+import random
+"""
 """
 
 
@@ -14,7 +17,7 @@ class Field:
         self.f_size (int):フィールドのサイズ
     """
 
-    def __init__(self) -> None:
+    def __init__(self, p: int, e: int, w: int, f: int, size: int) -> None:
         """
         Fieldの初期化を行う関数
         Args:
@@ -26,7 +29,45 @@ class Field:
         Returns:
             None
         """
-        pass
+        self.f_size = size
+        self.items: list[Player | Enemy | Wall] = []
+        self.create_field(size)
+        for _ in range(p):
+            while len(self.items) < size**2:
+                rand_pos = (random.randrange(size), random.randrange(size))
+                can_set = True
+                for item in self.items:
+                    item_pos = item.get_now_position
+                    if item_pos == rand_pos:
+                        can_set = False
+                        break
+                if can_set is True:
+                    self.items += [Player(rand_pos[0], rand_pos[1])]
+                    break
+        for _ in range(e):
+            while len(self.items) < size**2:
+                rand_pos = (random.randrange(size), random.randrange(size))
+                can_set = True
+                for item in self.items:
+                    item_pos = item.get_now_position
+                    if item_pos == rand_pos:
+                        can_set = False
+                        break
+                if can_set is True:
+                    self.items += [Enemy(rand_pos[0], rand_pos[1])]
+                    break
+        for _ in range(w):
+            while len(self.items) < size**2:
+                rand_pos = (random.randrange(size), random.randrange(size))
+                can_set = True
+                for item in self.items:
+                    item_pos = item.get_now_position
+                    if item_pos == rand_pos:
+                        can_set = False
+                        break
+                if can_set is True:
+                    self.items += [Wall(rand_pos[0], rand_pos[1])]
+                    break
 
     def display(self) -> None:
         """
@@ -36,14 +77,25 @@ class Field:
         Returns:
             None
         Examples:
-            >>> f = Field(1,1,0,1,4)
+            >>> f = Field(1,1,0,0,4)
+            >>> print(type(f.items[12]))
+            <class 'player.Player'>
+            >>> f.items[12].move((1,1))
+            >>> print(type(f.items[13]))
+            <class 'enemy.Enemy'>
+            >>> f.items[13].move((2,1))
             >>> f.display()
-            WWWW
-            WPEW
-            WF W
-            WWWW
+            🧱🧱🧱🧱
+            🧱👽🤡🧱
+            🧱　　🧱
+            🧱🧱🧱🧱
         """
-        pass
+        disp_list = [["　"] * self.f_size for i in range(self.f_size)]
+        for item in self.items:
+            item_x, item_y = item.get_now_position()
+            disp_list[item_y][item_x] = item.icon
+        for i in range(self.f_size):
+            print("".join(disp_list[i]))
 
     def update(self) -> None:
         """
@@ -52,6 +104,8 @@ class Field:
             None
         Returns:
             None
+        Examples:
+            pass
         """
         pass
 
@@ -65,12 +119,17 @@ class Field:
         Examples:
             >>> f = Field(0,0,0,0,4)
             >>> f.display()
-            WWWW
-            W  W
-            W  W
-            WWWW
+            🧱🧱🧱🧱
+            🧱　　🧱
+            🧱　　🧱
+            🧱🧱🧱🧱
         """
-        pass
+        for i in range(self.f_size):
+            for j in range(self.f_size):
+                if i == 0 or i == self.f_size-1:
+                    self.items += [Wall(i, j)]
+                elif j == 0 or j == self.f_size-1:
+                    self.items += [Wall(i, j)]
 
     def hit_check(self) -> list[int, list[int]]:
         """
@@ -80,25 +139,7 @@ class Field:
         Returns:
             list[int,list[int]]:アイテムが衝突したアイテムのインデックスのリスト
         Examples:
-            >>> f = Field(1,1,0,0,4)
-            >>> print(type(f.field[0]) is Player)
-            True
-            >>> f.field[0].now_x = 1
-            >>> f.field[0].now_y = 1
-            >>> f.field[0].next_x = 1
-            >>> f.field[0].next_y = 2
-            >>> print(type(f.field[0]) is Enemy)
-            False
-            >>> f.field[1].now_x = 2
-            >>> f.field[1].now_y = 2
-            >>> f.field[1].next_x = 1
-            >>> f.field[1].next_y = 2
-            >>> printf(f.hit_check())
-            [0,[1]]
-            >>> f.field[1].next_x = 2
-            >>> f.field[1].next_y = 1
-            >>> printf(f.hit_check())
-            [0,[]]
+            pass
         """
         pass
 

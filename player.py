@@ -33,25 +33,25 @@ class Player(Item):
         Example:
             >>> player = Player(1,2)
             >>> player.get_next_position(0)
-            (2, 2)
+            (1, 1)
             >>> player = Player(1,2)
             >>> player.get_next_position(1)
-            (1, 3)
+            (2, 2)
             >>> player = Player(1,2)
             >>> player.get_next_position(2)
-            (0, 2)
+            (1, 3)
             >>> player = Player(1,2)
             >>> player.get_next_position(3)
-            (1, 1)
+            (0, 2)
         """
         if (direction == 0):
-            self.next_x = self.now_x + 1
+            self.next_x = self.now_y - 1
         elif (direction == 1):
-            self.next_y = self.now_y + 1
+            self.next_y = self.now_x + 1
         elif (direction == 2):
-            self.next_x = self.now_x - 1
+            self.next_x = self.now_y + 1
         elif (direction == 3):
-            self.next_y = self.now_y - 1
+            self.next_y = self.now_x - 1
 
         return (self.next_x, self.next_y)
 

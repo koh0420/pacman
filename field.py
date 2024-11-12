@@ -1,6 +1,7 @@
 from player import Player
 from enemy import Enemy
 from wall import Wall
+from food import Food
 import random
 """
 """
@@ -30,7 +31,7 @@ class Field:
             None
         """
         self.f_size = size
-        self.items: list[Player | Enemy | Wall] = []
+        self.items: list[Player | Enemy | Wall | Food] = []
         self.create_field(size)
         for _ in range(p):
             while len(self.items) < size**2:
@@ -67,6 +68,18 @@ class Field:
                         break
                 if can_set is True:
                     self.items += [Wall(rand_pos[0], rand_pos[1])]
+                    break
+        for _ in range(f):
+            while len(self.items) < size**2:
+                rand_pos = (random.randrange(size), random.randrange(size))
+                can_set = True
+                for item in self.items:
+                    item_pos = item.get_now_position
+                    if item_pos == rand_pos:
+                        can_set = False
+                        break
+                if can_set is True:
+                    self.items += [Food(rand_pos[0], rand_pos[1])]
                     break
 
     def display(self) -> None:
@@ -141,7 +154,17 @@ class Field:
         Examples:
             pass
         """
-        pass
+        """
+        items_hit_list: list[Player | Enemy | Wall | Food] = []
+        for item in self.items:
+            item_hit_list: list[Player | Enemy | Wall | Food, list[Player | Enemy | Wall | Food]] = [item, []]
+            for hit_item in self.items:
+                if item != hit_item:
+                    if item.get_next_position == hit_item.get_next_position:
+                        item_hit_list[item] += [hit_item]
+            items_hit_list += items_hit_list
+        return items_hit_list
+        """
 
 
 if __name__ == "__main__":

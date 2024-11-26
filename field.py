@@ -121,8 +121,8 @@ class Field:
             pass
         """
         hit_list = self._hit_check()
-        print(hit_list)
         after_items = self.items
+        delete_list = []
         for hit in hit_list:
             item = after_items[hit[0]]
             for hit_items in hit[1]:
@@ -131,10 +131,33 @@ class Field:
                     item_index = self.items.index(item) 
                     after_items[item_index].next_x = after_items[item_index].now_x
                     after_items[item_index].next_y = after_items[item_index].now_y
+                if type(hit_item) is Food:
+                    if type(item) is Enemy:
+                        item_index = self.items.index(item) 
+                        after_items[item_index].next_x = after_items[item_index].now_x
+                        after_items[item_index].next_y = after_items[item_index].now_y
+                    elif type(item) is Player:
+                        delete_list += [after_items.index(hit_item)]
+                if type(hit_item) is Enemy:
+                    if type(item) is Enemy:
+                        item_index = self.items.index(item) 
+                        after_items[item_index].next_x = after_items[item_index].now_x
+                        after_items[item_index].next_y = after_items[item_index].now_y
+                    elif type(item) is Player:
+                        delete_list += [after_items.index(item)]
+                if type(hit_item) is Player:
+                    if type(item) is Player:
+                        item_index = self.items.index(item) 
+                        after_items[item_index].next_x = after_items[item_index].now_x
+                        after_items[item_index].next_y = after_items[item_index].now_y
+
         self.item = after_items
         for item in self.items:
             if isinstance(item, (Player, Enemy)):
                 item.move((item.next_x, item.next_y))
+            if after_items.index(item) in delete_list:
+                del self.items[after_items.index(item)]
+
 
 
     def create_field(self, f_size) -> None:

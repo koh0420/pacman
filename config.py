@@ -30,8 +30,8 @@ class Parameters:
     f_size: int = 12  # フィールドサイズ フィールドの1辺の長さ
     p_num: int = 1  # プレイヤーの数
     e_num: int = 1  # 敵の数
-    f_num: int = 0  # 食べ物の数
-    w_num: int = 0  # 壁の数
+    f_num: int = 1  # 食べ物の数
+    w_num: int = 1  # 壁の数
     # リストや辞書で与える例
 
 

@@ -18,7 +18,7 @@ class Field:
         self.f_size (int):フィールドのサイズ
     """
 
-    def __init__(self, p: int, e: int, w: int, f: int, size: int) -> None:
+    def __init__(self, p: int, e: int, f: int, w: int, size: int) -> None:
         """
         Fieldの初期化を行う関数
         Args:
@@ -38,7 +38,7 @@ class Field:
                 rand_pos = (random.randrange(size), random.randrange(size))
                 can_set = True
                 for item in self.items:
-                    item_pos = item.get_now_position
+                    item_pos = item.get_now_position()
                     if item_pos == rand_pos:
                         can_set = False
                         break
@@ -50,7 +50,7 @@ class Field:
                 rand_pos = (random.randrange(size), random.randrange(size))
                 can_set = True
                 for item in self.items:
-                    item_pos = item.get_now_position
+                    item_pos = item.get_now_position()
                     if item_pos == rand_pos:
                         can_set = False
                         break
@@ -62,7 +62,7 @@ class Field:
                 rand_pos = (random.randrange(size), random.randrange(size))
                 can_set = True
                 for item in self.items:
-                    item_pos = item.get_now_position
+                    item_pos = item.get_now_position()
                     if item_pos == rand_pos:
                         can_set = False
                         break
@@ -74,7 +74,7 @@ class Field:
                 rand_pos = (random.randrange(size), random.randrange(size))
                 can_set = True
                 for item in self.items:
-                    item_pos = item.get_now_position
+                    item_pos = item.get_now_position()
                     if item_pos == rand_pos:
                         can_set = False
                         break
@@ -120,7 +120,22 @@ class Field:
         Examples:
             pass
         """
-        pass
+        hit_list = self._hit_check()
+        print(hit_list)
+        after_items = self.items
+        for hit in hit_list:
+            item = after_items[hit[0]]
+            for hit_items in hit[1]:
+                hit_item = after_items[hit_items]
+                if type(hit_item) is Wall:
+                    item_index = self.items.index(item) 
+                    after_items[item_index].next_x = after_items[item_index].now_x
+                    after_items[item_index].next_y = after_items[item_index].now_y
+        self.item = after_items
+        for item in self.items:
+            if isinstance(item, (Player, Enemy)):
+                item.move((item.next_x, item.next_y))
+
 
     def create_field(self, f_size) -> None:
         """
@@ -144,7 +159,7 @@ class Field:
                 elif j == 0 or j == self.f_size-1:
                     self.items += [Wall(i, j)]
 
-    def hit_check(self) -> list[int, list[int]]:
+    def _hit_check(self) -> list[int, list[int]]:
         """
         アイテムがどのアイテムと衝突したかをチェックする関数
         Args:
@@ -154,17 +169,27 @@ class Field:
         Examples:
             pass
         """
-        """
-        items_hit_list: list[Player | Enemy | Wall | Food] = []
+        items_hit_list = []
         for item in self.items:
-            item_hit_list: list[Player | Enemy | Wall | Food, list[Player | Enemy | Wall | Food]] = [item, []]
+            hit_list = []
             for hit_item in self.items:
                 if item != hit_item:
-                    if item.get_next_position == hit_item.get_next_position:
-                        item_hit_list[item] += [hit_item]
-            items_hit_list += items_hit_list
+                    if isinstance(item, (Player, Enemy)):
+                        item_next_pos = (item.next_x, item.next_y)
+                        item_now_pos = item.get_now_position()
+                        hit_now_pos = hit_item.get_now_position()
+                        if isinstance(hit_item, (Food, Wall)):
+                            if item_next_pos == hit_now_pos:
+                                hit_list += [self.items.index(hit_item)]
+                        if isinstance(hit_item, (Player, Enemy)):
+                            hit_next_pos = (hit_item.next_x, hit_item.next_y)
+                            if item_next_pos == hit_next_pos:
+                                hit_list += [self.items.index(hit_item)]
+                            if (item_next_pos == hit_now_pos) and (item_now_pos == hit_next_pos):
+                                hit_list += [self.items.index(hit_item)]
+            if hit_list != [] :
+                items_hit_list += [[self.items.index(item), hit_list]]
         return items_hit_list
-        """
 
 
 if __name__ == "__main__":

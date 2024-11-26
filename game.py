@@ -1,7 +1,6 @@
 import time
 from player import Player
 from enemy import Enemy
-from food import Food
 from field import Field
 from input import UserInput
 from config import Parameters
@@ -64,27 +63,14 @@ class Game:
                 if type(item) is Player:
                     # キー入力を受け取る
                     key = UserInput.get_user_input(self)
-                    item.move(item.get_next_position(key))
+                    item.get_next_position(key)
                 if type(item) is Enemy:  # 敵の移動を決定
-                    pass
+                    item.get_next_position()
+            self.field.update()
             # 一定の間隔で処理を繰り返す
             # 0.3秒待つ
             time.sleep(0.3)
 
-            check = 0
-            for item in self.field.items:
-                if type(item) is Player:
-                    check |= 1
-                if type(item) is Food:  # 敵の移動を決定
-                    check |= 2
-
-            if not check & 1:
-                print("You lose")
-                exit(0)
-
-            if not check & 2:
-                print("Congratulations")
-                exit(0)
             # 終了条件のチェック
             # 例えば、全ての食べ物が消えたり、敵とプレイヤーが衝突したりしたら終了する処理を追加する
 

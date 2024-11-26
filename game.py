@@ -1,6 +1,7 @@
 import time
 from player import Player
 from enemy import Enemy
+from food import Food
 from field import Field
 from input import UserInput
 from config import Parameters
@@ -58,6 +59,22 @@ class Game:
             os.system("cls" if os.name == "nt" else "clear")  # ターミナルをクリア
             self.field.display()
 
+            # 終了条件のチェック
+            # 例えば、全ての食べ物が消えたり、敵とプレイヤーが衝突したりしたら終了する処理を追加する
+            Player_count = 0
+            Item_count = 0
+            for item in self.field.items:
+                if type(item) is Player:
+                    Player_count += 1
+                if type(item) is Food:
+                    Item_count += 1
+            if (Player_count == 0):
+                print("You Lose ^^")
+                exit(0)
+            if (Item_count == 0):
+                print("You Win!!")
+                exit(0)
+
             # プレイヤーの移動を決定
             for item in self.field.items:
                 if type(item) is Player:
@@ -70,9 +87,6 @@ class Game:
             # 一定の間隔で処理を繰り返す
             # 0.3秒待つ
             time.sleep(0.3)
-
-            # 終了条件のチェック
-            # 例えば、全ての食べ物が消えたり、敵とプレイヤーが衝突したりしたら終了する処理を追加する
 
 
 if __name__ == "__main__":

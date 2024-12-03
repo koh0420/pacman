@@ -145,7 +145,6 @@ class Field:
             if isinstance(item, (Player, Enemy)):
                 item.move((item.next_x, item.next_y))
             if after_items.index(item) in delete_list:
-                
                 del self.items[after_items.index(item)]
 
     def create_field(self, wall_num) -> None:
@@ -169,7 +168,6 @@ class Field:
                     self.items += [Wall(i, j)]
                 elif j == 0 or j == self.f_size-1:
                     self.items += [Wall(i, j)]
-        
         for _ in range(wall_num):
             while len(self.items) < self.f_size**2:
                 candiate_pos = (random.randrange(self.f_size), random.randrange(self.f_size))
@@ -187,9 +185,10 @@ class Field:
                             nearest_wall += [[item, distance]]
                     min_distance = min(nearest_wall, key=lambda x: x[1])[1]
                     nearest_wall = [item for item in nearest_wall if item[1] == min_distance]
+                    wall_index = random.randrange(len(nearest_wall))
 
                     print(nearest_wall)
-                    set_pos = [nearest_wall[0][0].now_x, nearest_wall[0][0].now_y]
+                    set_pos = [nearest_wall[wall_index][0].now_x, nearest_wall[wall_index][0].now_y]
                     set_dir_x = 0
                     set_dir_y = 0
                     if set_pos[0] > candiate_pos[0]:
@@ -200,14 +199,17 @@ class Field:
                         set_dir_y = -1
                     elif set_pos[1] < candiate_pos[1]:
                         set_dir_y = 1
-                    
-                    print("target:",candiate_pos)
-                    for __ in range(int(nearest_wall[0][1])):
-                        set_pos[0] += set_dir_x
-                        set_pos[1] += set_dir_y
-                        print(set_pos)
-                        self.items += [Wall(set_pos[0], set_pos[1])]
-                    break
+                    if int(nearest_wall[wall_index][1]) > 2:
+                        wall_space = random.randint(-3, 1)
+                        for wall_count in range(int(nearest_wall[wall_index][1])):
+                            set_pos[0] += set_dir_x
+                            set_pos[1] += set_dir_y
+                            if wall_space <= 0:
+                                self.items += [Wall(set_pos[0], set_pos[1])]
+                            elif wall_space > 0:
+                                if wall_count >= wall_space:
+                                    self.items += [Wall(set_pos[0], set_pos[1])]
+                        break
 
     def _hit_check(self) -> list[int, list[int]]:
         """

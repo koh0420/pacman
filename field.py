@@ -3,6 +3,7 @@ from enemy import Enemy
 from wall import Wall
 from food import Food
 import random
+import math
 """
 """
 
@@ -32,7 +33,7 @@ class Field:
         """
         self.f_size = size
         self.items: list[Player | Enemy | Wall | Food] = []
-        self.create_field(size)
+        self.create_field(w)
         for _ in range(p):
             while len(self.items) < size**2:
                 rand_pos = (random.randrange(size), random.randrange(size))
@@ -56,18 +57,6 @@ class Field:
                         break
                 if can_set is True:
                     self.items += [Enemy(rand_pos[0], rand_pos[1])]
-                    break
-        for _ in range(w):
-            while len(self.items) < size**2:
-                rand_pos = (random.randrange(size), random.randrange(size))
-                can_set = True
-                for item in self.items:
-                    item_pos = item.get_now_position()
-                    if item_pos == rand_pos:
-                        can_set = False
-                        break
-                if can_set is True:
-                    self.items += [Wall(rand_pos[0], rand_pos[1])]
                     break
         for _ in range(f):
             while len(self.items) < size**2:
@@ -128,26 +117,26 @@ class Field:
             for hit_items in hit[1]:
                 hit_item = after_items[hit_items]
                 if type(hit_item) is Wall:
-                    item_index = self.items.index(item) 
+                    item_index = self.items.index(item)
                     after_items[item_index].next_x = after_items[item_index].now_x
                     after_items[item_index].next_y = after_items[item_index].now_y
                 if type(hit_item) is Food:
                     if type(item) is Enemy:
-                        item_index = self.items.index(item) 
+                        item_index = self.items.index(item)
                         after_items[item_index].next_x = after_items[item_index].now_x
                         after_items[item_index].next_y = after_items[item_index].now_y
                     elif type(item) is Player:
                         delete_list += [after_items.index(hit_item)]
                 if type(hit_item) is Enemy:
                     if type(item) is Enemy:
-                        item_index = self.items.index(item) 
+                        item_index = self.items.index(item)
                         after_items[item_index].next_x = after_items[item_index].now_x
                         after_items[item_index].next_y = after_items[item_index].now_y
                     elif type(item) is Player:
                         delete_list += [after_items.index(item)]
                 if type(hit_item) is Player:
                     if type(item) is Player:
-                        item_index = self.items.index(item) 
+                        item_index = self.items.index(item)
                         after_items[item_index].next_x = after_items[item_index].now_x
                         after_items[item_index].next_y = after_items[item_index].now_y
 
@@ -156,15 +145,14 @@ class Field:
             if isinstance(item, (Player, Enemy)):
                 item.move((item.next_x, item.next_y))
             if after_items.index(item) in delete_list:
+                
                 del self.items[after_items.index(item)]
 
-
-
-    def create_field(self, f_size) -> None:
+    def create_field(self, wall_num) -> None:
         """
         フィールドに壁を設置する関数
         Args:
-            f_size (int):フィールドのサイズ
+            wall_num (int):追加する壁の数
         Returns:
             None
         Examples:
@@ -181,6 +169,45 @@ class Field:
                     self.items += [Wall(i, j)]
                 elif j == 0 or j == self.f_size-1:
                     self.items += [Wall(i, j)]
+        
+        for _ in range(wall_num):
+            while len(self.items) < self.f_size**2:
+                candiate_pos = (random.randrange(self.f_size), random.randrange(self.f_size))
+                can_set = True
+                for item in self.items:
+                    item_pos = item.get_now_position()
+                    if item_pos == candiate_pos:
+                        can_set = False
+                        break
+                if can_set is True:
+                    nearest_wall = []
+                    for item in self.items:
+                        if type(item) is Wall:
+                            distance = math.sqrt((item.now_x - candiate_pos[0])**2 + (item.now_y - candiate_pos[1])**2)
+                            nearest_wall += [[item, distance]]
+                    min_distance = min(nearest_wall, key=lambda x: x[1])[1]
+                    nearest_wall = [item for item in nearest_wall if item[1] == min_distance]
+
+                    print(nearest_wall)
+                    set_pos = [nearest_wall[0][0].now_x, nearest_wall[0][0].now_y]
+                    set_dir_x = 0
+                    set_dir_y = 0
+                    if set_pos[0] > candiate_pos[0]:
+                        set_dir_x = -1
+                    elif set_pos[0] < candiate_pos[0]:
+                        set_dir_x = 1
+                    if set_pos[1] > candiate_pos[1]:
+                        set_dir_y = -1
+                    elif set_pos[1] < candiate_pos[1]:
+                        set_dir_y = 1
+                    
+                    print("target:",candiate_pos)
+                    for __ in range(int(nearest_wall[0][1])):
+                        set_pos[0] += set_dir_x
+                        set_pos[1] += set_dir_y
+                        print(set_pos)
+                        self.items += [Wall(set_pos[0], set_pos[1])]
+                    break
 
     def _hit_check(self) -> list[int, list[int]]:
         """
@@ -210,7 +237,7 @@ class Field:
                                 hit_list += [self.items.index(hit_item)]
                             if (item_next_pos == hit_now_pos) and (item_now_pos == hit_next_pos):
                                 hit_list += [self.items.index(hit_item)]
-            if hit_list != [] :
+            if hit_list != []:
                 items_hit_list += [[self.items.index(item), hit_list]]
         return items_hit_list
 

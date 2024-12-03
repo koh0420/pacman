@@ -27,12 +27,11 @@ class Parameters:
     run_date: str = ''  # 実行時の時刻
     git_revision: str = ''  # 実行時のプログラムのGitのバージョン
 
-    f_size: int = 12  # フィールドサイズ フィールドの1辺の長さ
+    f_size: int = 30  # フィールドサイズ フィールドの1辺の長さ
     p_num: int = 1  # プレイヤーの数
-    e_num: int = 1  # 敵の数
-    f_num: int = 1  # 食べ物の数
-    w_num: int = 1  # 壁の数
-    # リストや辞書で与える例
+    e_num: int = 5  # 敵の数
+    f_num: int = 3  # 食べ物の数
+    w_num: int = 20  # 壁の数
 
 
 def common_args(parser: 'ArgumentParser'):
@@ -47,9 +46,6 @@ def common_args(parser: 'ArgumentParser'):
         help="パラメータ設定ファイルのパスを指定．デフォルトはNone",
         type=str,
         default=None)
-    parser.add_argument("-a", "--arg1", type=int, help="arg1の説明", default=0)
-    # コマンドライン引数を指定
-    parser.add_argument("--arg2", type=float, help="arg2の説明", default=1.0)
     # コマンドライン引数を指定
     return parser
 
